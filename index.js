@@ -44,7 +44,7 @@ $(document).ready(function() {
                 contentType: 'application/json',
                 data: JSON.stringify({'patientBio': patientBio, 'bpiDetails': bpiDetails}),
                 success: function(response) {
-                    $('#success-message').text("Patient's details have been saved successfully!").show().delay(4000).fadeOut();
+                    $('#success-message').text(response.status).show().delay(4000).fadeOut();
 
                     $('#patientDetails')[0].reset();
                 },
