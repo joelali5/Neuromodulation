@@ -1,11 +1,9 @@
 $(document).ready(function() {
-    console.log("DOM is ready.");
     $('#submitForms').on('click', function(e) {
         e.preventDefault();
 
         var errMsg = '';
         var treatmentValue = parseInt($('#treatment').val(), 10);
-        console.log(typeof treatmentValue);
 
         var patientBio = {
             firstName: $('#firstName').val().trim(),
@@ -38,17 +36,20 @@ $(document).ready(function() {
             $('#error-message').text(errMsg).show();
         } else {
             $('#error-message').hide();
+            // $('.loaderOverlay').show();
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({'patientBio': patientBio, 'bpiDetails': bpiDetails}),
                 success: function(response) {
+                    // $('.loaderOverlay').hide();
                     $('#success-message').text(response.status).show().delay(4000).fadeOut();
 
                     $('#patientDetails')[0].reset();
                 },
                 error: function(xhr, status, error) {
+                    // $('.loaderOverlay').hide();
                     $('#error-message').text(error);
                 },
             });
