@@ -153,6 +153,10 @@ $(document).ready(function() {
             enjoyment: parseInt($('#enjoyment').val(), 10)
         };
 
+        var totalScore = updatedDetails.worst + updatedDetails.least + updatedDetails.average + updatedDetails.now +
+                         updatedDetails.activity + updatedDetails.mood + updatedDetails.walking + updatedDetails.work +
+                         updatedDetails.relationships + updatedDetails.sleep + updatedDetails.enjoyment;
+
         $.ajax({
             url: 'index.php',
             type: 'POST',
@@ -160,11 +164,20 @@ $(document).ready(function() {
             data: JSON.stringify({
                 action: 'updatePatient',
                 patientId: patientId,
-                updatedDetails: updatedDetails
+                updatedDetails: updatedDetails,
+                totalScore: totalScore
             }),
             success: function(response) {
                 if (response.status === 'success') {
-                    fetchPatientDetails();
+
+                    $('#patientDetails tbody tr').each(function() {
+                        if ($(this).data('patient-id') == patientId) {
+                            $(this).find('td').eq(1).text(updatedDetails.firstName);
+                            $(this).find('td').eq(2).text(updatedDetails.surname);
+                            $(this).find('td').eq(5).text(totalScore);
+                        }
+                    });
+
                     $('#success-msg').text('Record updated successfully').removeClass('d-none').delay(4000).fadeOut();
                     $('#patientDetailsForm').hide();
                     $('input').attr('readonly', true);

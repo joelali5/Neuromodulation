@@ -44,7 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $pdo->beginTransaction();
 
-            $sqlBio = "INSERT INTO PatientDetailsAndBPI (FirstName, Surname, DateOfBirth, Age, ReliefPainTreatments, PainWorst, PainLeast, PainAverage, PainRightNow, PainInterferedGeneralActivity, PainInterferedMood, PainInterferedWalkingAbility, PainInterferedNormalWork, PainInterferedRelationships, PainInterferedSleep, PainInterferedEnjoymentOfLife, TotalScore, SubmissionDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sqlBio = "{CALL sp_InsertPatientDetailsAndBPI(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+
             $stmtBio = $pdo->prepare($sqlBio);
             $stmtBio->execute([
                 $patientDetails['firstName'],
@@ -79,14 +80,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($data['action'] === 'updatePatient' && isset($data['patientId']) && isset($data['updatedDetails'])) {
             $patientId = $data['patientId'];
             $updatedDetails = $data['updatedDetails'];
+            $totalScore = $data['totalScore'];
     
             try {
                 $pdo->beginTransaction();
-                $sql = "UPDATE PatientDetailsAndBPI
-                        SET FirstName = ?, Surname = ?, ReliefPainTreatments = ?, PainWorst = ?, PainLeast = ?, PainAverage = ?, PainRightNow = ?, PainInterferedGeneralActivity = ?, PainInterferedMood = ?, PainInterferedWalkingAbility = ?, PainInterferedNormalWork = ?, PainInterferedRelationships = ?, PainInterferedSleep = ?, PainInterferedEnjoymentOfLife = ?
-                        WHERE ID = ?";
+                $sql = "{CALL sp_UpdatePatientDetails(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute([
+                    $patientId,
                     $updatedDetails['firstName'],
                     $updatedDetails['surname'],
                     $updatedDetails['treatment'],
@@ -101,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $updatedDetails['relationships'],
                     $updatedDetails['sleep'],
                     $updatedDetails['enjoyment'],
-                    $patientId
+                    $totalScore
                 ]);
     
                 $pdo->commit();
@@ -114,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }elseif ($data['action'] === 'deletePatient' && isset($data['patientId'])) {
             $patientId = $data['patientId'];
-            $sql = "DELETE FROM PatientDetailsAndBPI WHERE ID = ?";
+            $sql = "{CALL sp_DeletePatientDetails(?)}";
             $stmt = $pdo->prepare($sql);
             if ($stmt->execute([$patientId])) {
                 echo json_encode(['status' => 'success']);
@@ -129,8 +130,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
     if ($_GET['action'] === 'getPatientDetails') {
-        $sql = "SELECT ID, SubmissionDate, FirstName, Surname, Age, DateOfBirth, TotalScore
-                FROM PatientDetailsAndBPI";
+
+        $sql = "{CALL sp_GetPatientDetails}";
     
         try {
             $stmt = $pdo->prepare($sql);
@@ -143,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif ($_GET['action'] === 'fetchPatientDetails' && isset($_GET['patientId'])) {
         $patientId = $_GET['patientId'];
-        $sql = "SELECT * FROM PatientDetailsAndBPI WHERE ID = ?";
+        $sql = "{CALL sp_GetPatientDetailsById(?)}";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$patientId]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
