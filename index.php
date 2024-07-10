@@ -112,7 +112,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 error_log("Database error: " . $e->getMessage());
                 echo json_encode(['status' => 'error', 'message' => 'Error updating patient details: ' . $e->getMessage()]);
             }
-        } else {
+        }elseif ($data['action'] === 'deletePatient' && isset($data['patientId'])) {
+            $patientId = $data['patientId'];
+            $sql = "DELETE FROM PatientDetailsAndBPI WHERE ID = ?";
+            $stmt = $pdo->prepare($sql);
+            if ($stmt->execute([$patientId])) {
+                echo json_encode(['status' => 'success']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Failed to delete record']);
+            }
+        }else {
             echo json_encode(['status' => 'error', 'message' => 'Invalid action or missing parameters']);
         }
     }else {

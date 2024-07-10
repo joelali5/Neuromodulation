@@ -69,26 +69,6 @@ $(document).ready(function() {
         $('#updateBtn').removeClass('d-none');
     });
 
-    $('#deleteBtn').click(function() {
-        var patientId = $('#patientForm').data('patient-id');
-        if (confirm('Are you sure you want to delete this record?')) {
-            $.ajax({
-                url: 'index.php',
-                type: 'POST',
-                data: {action: 'deletePatient', patientId: patientId},
-                dataType: 'json',
-                success: function(response) {
-                    if (response.status === 'success') {
-                        alert('Record deleted successfully');
-                        $('#patientDetailsForm').hide();
-                    } else {
-                        alert('Error deleting record');
-                    }
-                }
-            });
-        }
-    });
-
     $('#updateBtn').click(function() {
         var patientId = $('#patientForm').data('patient-id');
         var updatedDetails = {
@@ -128,5 +108,28 @@ $(document).ready(function() {
                 }
             }
         });
+    });
+
+    $('#deleteBtn').click(function() {
+        var patientId = $('#patientForm').data('patient-id');
+        if (confirm("Are you sure you want to delete this patient's record?")) {
+            $.ajax({
+                url: 'index.php',
+                type: 'POST',
+                data: JSON.stringify({action: 'deletePatient', patientId: patientId}),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        fetchPatientDetails();
+                        $('#success-msg').text("Patient's record deleted successfully").removeClass('d-none').delay(4000).fadeOut();
+                        $('#patientDetailsForm').hide();
+                    } else {
+                        fetchPatientDetails();
+                        $('#error-msg').text("Unable to delete patient's record");
+                    }
+                }
+            });
+        }
     });
 });
