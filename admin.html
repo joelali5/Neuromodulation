@@ -24,23 +24,50 @@
 <body>
     <div class="container-fluid mt-5">
         <div class="table-container">
-            <h2 class="mb-3">Admin View</h2>
-            <div id="error-msg" class="alert alert-danger d-none"></div>
-            <div id="success-msg" class="alert alert-success d-none"></div>
-            <table id="patientDetails" class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Date of Submission</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Surname</th>
-                        <th scope="col">Age</th>
-                        <th scope="col">Date of Birth</th>
-                        <th scope="col">Total Score</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+          <h2 class="mb-3">Admin View</h2>
+          <div id="error-msg" class="alert alert-danger d-none"></div>
+          <div id="success-msg" class="alert alert-success d-none"></div>
+
+          <div class="row mb-3">
+            <h2>Filter</h2>
+            <div class="col">
+                <input type="text" id="filterByFirstName" class="form-control" placeholder="Filter by First Name">
+            </div>
+            <div class="col">
+                <input type="text" id="filterBySurname" class="form-control" placeholder="Filter by Surname">
+            </div>
+            <div class="col">
+                <input type="date" id="filterByDateOfBirth" class="form-control" placeholder="Filter by Date of Birth">
+            </div>
+            <div class="col">
+                <button id="clearFilters" class="btn btn-secondary">Clear Filters</button>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <h2>Sort</h2>
+            <div class="col">
+                <button id="sortByFirstName" class="btn btn-secondary">First Name</button>
+                <button id="sortBySurname" class="btn btn-secondary">Surname</button>
+                <button id="sortByAge" class="btn btn-secondary">Age</button>
+                <button id="sortByTotalScore" class="btn btn-secondary">Total Score</button>
+            </div>
+          </div>
+
+          <table id="patientDetails" class="table">
+              <thead>
+                  <tr>
+                      <th scope="col">Date of Submission</th>
+                      <th scope="col">First Name</th>
+                      <th scope="col">Surname</th>
+                      <th scope="col">Age</th>
+                      <th scope="col">Date of Birth</th>
+                      <th scope="col">Total Score</th>
+                  </tr>
+              </thead>
+              <tbody>
+              </tbody>
+          </table>
         </div>
 
         <div id="patientDetailsForm" class="form-container d-none mt-4">
