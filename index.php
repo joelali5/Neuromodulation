@@ -69,14 +69,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $pdo->commit();
 
-            echo json_encode(['status' => 'success']);
+            echo json_encode(['status' => "Patient's details have been saved successfully!"]);
         } catch (PDOException $e) {
             $pdo->rollBack();
             error_log("Database error: " . $e->getMessage());
-            echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()]);
+            echo json_encode(['status' => 'error', 'message' => 'Error submitting patient details: ' . $e->getMessage()]);
         }
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Invalid data received']);
     }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
+    if ($_GET['action'] === 'getPatientDetails') {
+        $sql = "SELECT ID, SubmissionDate, FirstName, Surname, Age, DateOfBirth, TotalScore
+                FROM PatientDetailsAndBPI";
+    
+        try {
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+            echo json_encode(['status' => 'success', 'data' => $results]);
+        } catch (PDOException $e) {
+            echo json_encode(['status' => 'error', 'message' => 'Error fetching patient details: ' . $e->getMessage()]);
+        }
+    } elseif ($_GET['action'] === 'fetchPatientDetails' && isset($_GET['patientId'])) {
+        $patientId = $_GET['patientId'];
+        $sql = "SELECT * FROM PatientDetailsAndBPI WHERE ID = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$patientId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        echo json_encode(['status' => 'success', 'data' => $result]);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid action or missing parameters']);
+    }
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request method or missing parameters']);
 }
 ?>
