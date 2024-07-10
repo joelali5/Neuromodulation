@@ -27,7 +27,7 @@ $(document).ready(function() {
         };
 
         if (!patientBio.firstName || !patientBio.surname || !patientBio.dateOfBirth) {
-            errMsg = 'Please fill out all patient personal details.';
+            errMsg = 'Please fill out all form fields.';
         } else if (isNaN(treatmentValue) || treatmentValue < 0 || treatmentValue > 100) {
             errMsg = 'Please enter a treatment value between 0 and 100.';
         }
@@ -36,20 +36,17 @@ $(document).ready(function() {
             $('#error-message').text(errMsg).show();
         } else {
             $('#error-message').hide();
-            // $('.loaderOverlay').show();
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({'patientBio': patientBio, 'bpiDetails': bpiDetails}),
                 success: function(response) {
-                    // $('.loaderOverlay').hide();
                     $('#success-message').text(response.status).show().delay(4000).fadeOut();
 
                     $('#patientDetails')[0].reset();
                 },
                 error: function(xhr, status, error) {
-                    // $('.loaderOverlay').hide();
                     $('#error-message').text(error);
                 },
             });

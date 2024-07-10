@@ -75,7 +75,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             error_log("Database error: " . $e->getMessage());
             echo json_encode(['status' => 'error', 'message' => 'Error submitting patient details: ' . $e->getMessage()]);
         }
-    } else {
+    }elseif(isset($data['action'])) {
+        if ($data['action'] === 'updatePatient' && isset($data['patientId']) && isset($data['updatedDetails'])) {
+            $patientId = $data['patientId'];
+            $updatedDetails = $data['updatedDetails'];
+    
+            try {
+                $pdo->beginTransaction();
+                $sql = "UPDATE PatientDetailsAndBPI
+                        SET FirstName = ?, Surname = ?, ReliefPainTreatments = ?, PainWorst = ?, PainLeast = ?, PainAverage = ?, PainRightNow = ?, PainInterferedGeneralActivity = ?, PainInterferedMood = ?, PainInterferedWalkingAbility = ?, PainInterferedNormalWork = ?, PainInterferedRelationships = ?, PainInterferedSleep = ?, PainInterferedEnjoymentOfLife = ?
+                        WHERE ID = ?";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([
+                    $updatedDetails['firstName'],
+                    $updatedDetails['surname'],
+                    $updatedDetails['treatment'],
+                    $updatedDetails['worst'],
+                    $updatedDetails['least'],
+                    $updatedDetails['average'],
+                    $updatedDetails['now'],
+                    $updatedDetails['activity'],
+                    $updatedDetails['mood'],
+                    $updatedDetails['walking'],
+                    $updatedDetails['work'],
+                    $updatedDetails['relationships'],
+                    $updatedDetails['sleep'],
+                    $updatedDetails['enjoyment'],
+                    $patientId
+                ]);
+    
+                $pdo->commit();
+    
+                echo json_encode(['status' => 'success']);
+            } catch (PDOException $e) {
+                $pdo->rollBack();
+                error_log("Database error: " . $e->getMessage());
+                echo json_encode(['status' => 'error', 'message' => 'Error updating patient details: ' . $e->getMessage()]);
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Invalid action or missing parameters']);
+        }
+    }else {
         echo json_encode(['status' => 'error', 'message' => 'Invalid data received']);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
@@ -102,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Invalid action or missing parameters']);
     }
-} else {
+}else {
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method or missing parameters']);
 }
 ?>

@@ -5,7 +5,6 @@ $(document).ready(function() {
             type: 'GET',
             dataType: 'json',
             success: function(data) {
-                console.log(data);
                 var tableBody = $('#patientDetails tbody');
                 tableBody.empty();
                 $.each(data.data, function(index, patient) {
@@ -67,6 +66,7 @@ $(document).ready(function() {
 
     $('#editBtn').click(function() {
         $('input').removeAttr('readonly');
+        $('#updateBtn').removeClass('d-none');
     });
 
     $('#deleteBtn').click(function() {
@@ -87,5 +87,46 @@ $(document).ready(function() {
                 }
             });
         }
+    });
+
+    $('#updateBtn').click(function() {
+        var patientId = $('#patientForm').data('patient-id');
+        var updatedDetails = {
+            firstName: $('#firstName').val().trim(),
+            surname: $('#surname').val().trim(),
+            treatment: parseInt($('#treatment').val(), 10),
+            worst: parseInt($('#worst').val(), 10),
+            least: parseInt($('#least').val(), 10),
+            average: parseInt($('#average').val(), 10),
+            now: parseInt($('#now').val(), 10),
+            activity: parseInt($('#activity').val(), 10),
+            mood: parseInt($('#mood').val(), 10),
+            walking: parseInt($('#walking').val(), 10),
+            work: parseInt($('#work').val(), 10),
+            relationships: parseInt($('#relationships').val(), 10),
+            sleep: parseInt($('#sleep').val(), 10),
+            enjoyment: parseInt($('#enjoyment').val(), 10)
+        };
+
+        $.ajax({
+            url: 'index.php',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                action: 'updatePatient',
+                patientId: patientId,
+                updatedDetails: updatedDetails
+            }),
+            success: function(response) {
+                if (response.status === 'success') {
+                    fetchPatientDetails();
+                    $('#success-msg').text('Record updated successfully').removeClass('d-none').delay(4000).fadeOut();
+                    $('#patientDetailsForm').hide();
+                    $('input').attr('readonly', true);
+                } else {
+                    $('#error-msg').text('Error updating record').removeClass('d-none');
+                }
+            }
+        });
     });
 });
