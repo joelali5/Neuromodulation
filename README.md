@@ -39,7 +39,7 @@ Neuromodulation is a Patient Management System designed to handle patient data,
 
 1. **Clone the repository**:
 
-   git clone https://github.com/joelali5/The-Walton-Center-NHS-Foundation-Trust-Coding-Challenge.git
+   git clone https://github.com/joelali5/Neuromodulation.git
 
 2. **Set up the MSSQL database**:
 
