@@ -20,6 +20,7 @@ Neuromodulation is a Patient Management System designed to handle patient data,
 ├── Database
     ├── Stored Procedures
     ├── CreateTable.sql
+    ├── seed.sql
 ├── admin.html
 ├── admin.js 
 ├── index.html
@@ -27,6 +28,12 @@ Neuromodulation is a Patient Management System designed to handle patient data,
 ├── index.php
 ├── README.md
 ├── web.config
+
+## Key Decisions to support development
+    - Update Button: I created an update button in the admin view to instantly update the UI and database
+    - Database creation and Stored Procedures: The 'CreateTable.sql' script also contains the sql commands for creating the stored procedures.     This is done to avoid any potential errors that may arise from running the stored procedures and createTable scripts separately.
+    - Admin Button/Link: I added the 'target' attribute here with its value set to '_blank' so it opens in a new tab.
+    -I added a seed file to manually seed the database with so as to have enough data to perform operations like sorting and filtering.
 
 ## Setup
 
@@ -41,6 +48,9 @@ Neuromodulation is a Patient Management System designed to handle patient data,
 
 3. **Configure the PHP script**:
     Update the database connection details in index.php if necessary.
+
+4. **Seed Database**
+    Manually seed the database to have enough data to perform certain operations like sorting and filtering
 
 
 ## How to Use
@@ -60,9 +70,4 @@ Neuromodulation is a Patient Management System designed to handle patient data,
     - Use the edit button to update patient information (This makes the form editable and also displays the update button)
     - Click the edit button to update the interface with the updated form values and also persist the values to the database
     - Use the delete button to remove a patient record (This updates the user interface and the database simultaneously)
-
-
-## Key Decisions to support development
-    - Update Button: I created an update button in the admin view to instantly update the UI and database
-    - Database creation and Stored Procedures: The 'CreateTable.sql' script also contains the sql commands for creating the stored procedures.     This is done to avoid any potential errors that may arise from running the stored procedures and createTable scripts separately.
-    - Admin Button/Link: I added the 'target' attribute here with its value set to '_blank' so it opens in a new tab. 
+ 
