@@ -49,6 +49,7 @@ Neuromodulation is a Patient Management System designed to handle patient data,
 
     - Open index.html in your browser.
     - Fill out the patient details and submit the form.
+    -The page displays a loading spinner
     - The form data will be sent to the server and stored in the database.
 
 **Admin Interface**:

@@ -11,6 +11,14 @@ $(document).ready(function() {
             dateOfBirth: $('#dateOfBirth').val().trim(),
         };
 
+        function showSpinner() {
+            $('#loadingOverlay').show();
+        }
+    
+        function hideSpinner() {
+            $('#loadingOverlay').hide();
+        }    
+
         var bpiDetails = {
             treatment: treatmentValue,
             worst: parseInt($('#worst').val(), 10),
@@ -36,17 +44,20 @@ $(document).ready(function() {
             $('#error-message').text(errMsg).show();
         } else {
             $('#error-message').hide();
+            showSpinner();
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({'patientBio': patientBio, 'bpiDetails': bpiDetails}),
                 success: function(response) {
+                    hideSpinner();
                     $('#success-message').text(response.status).show().delay(4000).fadeOut();
 
                     $('#patientDetails')[0].reset();
                 },
                 error: function(xhr, status, error) {
+                    hideSpinner();
                     $('#error-message').text(error);
                 },
             });

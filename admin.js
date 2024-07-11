@@ -33,6 +33,14 @@ $(document).ready(function() {
         });
     }
 
+    function showSpinner() {
+        $('#loadingOverlay').show();
+    }
+
+    function hideSpinner() {
+        $('#loadingOverlay').hide();
+    }
+
     $('#filterByFirstName').on('input', function() {
         var filterValue = $(this).val().toLowerCase();
         var filteredData = patientData.filter(function(patient) {
@@ -90,12 +98,14 @@ $(document).ready(function() {
     });
 
     function getAllPatientDetails(patientId) {
+        showSpinner();
         $.ajax({
             url: 'index.php',
             type: 'GET',
             data: {action: 'fetchPatientDetails', patientId: patientId},
             dataType: 'json',
             success: function(response) {
+                hideSpinner();
                 if (response.status === 'success') {
                     var data = response.data;
                     $('#firstName').val(data.FirstName);
@@ -116,6 +126,7 @@ $(document).ready(function() {
                     $('#patientForm').data('patient-id', patientId);
                     $('#patientDetailsForm').removeClass('d-none').show();
                 } else {
+                    hideSpinner();
                     alert('Error fetching details');
                 }
             }
@@ -157,6 +168,7 @@ $(document).ready(function() {
                          updatedDetails.activity + updatedDetails.mood + updatedDetails.walking + updatedDetails.work +
                          updatedDetails.relationships + updatedDetails.sleep + updatedDetails.enjoyment;
 
+        showSpinner();
         $.ajax({
             url: 'index.php',
             type: 'POST',
@@ -168,6 +180,7 @@ $(document).ready(function() {
                 totalScore: totalScore
             }),
             success: function(response) {
+                hideSpinner();
                 if (response.status === 'success') {
 
                     $('#patientDetails tbody tr').each(function() {
@@ -182,6 +195,7 @@ $(document).ready(function() {
                     $('#patientDetailsForm').hide();
                     $('input').attr('readonly', true);
                 } else {
+                    hideSpinner();
                     $('#error-msg').text('Error updating record').removeClass('d-none');
                 }
             }
@@ -192,6 +206,7 @@ $(document).ready(function() {
     $('#deleteBtn').click(function() {
         var patientId = $('#patientForm').data('patient-id');
         if (confirm("Are you sure you want to delete this patient's record?")) {
+            showSpinner();
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
@@ -199,6 +214,7 @@ $(document).ready(function() {
                 dataType: 'json',
                 contentType: 'application/json',
                 success: function(response) {
+                    hideSpinner();
                     if (response.status === 'success') {
                         fetchPatientDetails();
                         $('#success-msg').text("Patient's record deleted successfully").removeClass('d-none').delay(4000).fadeOut(2000);
