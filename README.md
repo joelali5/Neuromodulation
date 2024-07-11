@@ -70,4 +70,11 @@ Neuromodulation is a Patient Management System designed to handle patient data,
     - Use the edit button to update patient information (This makes the form editable and also displays the update button)
     - Click the edit button to update the interface with the updated form values and also persist the values to the database
     - Use the delete button to remove a patient record (This updates the user interface and the database simultaneously)
+
+**Screenshots**
+![ss1](https://github.com/joelali5/Neuromodulation/assets/42684254/253d9878-1346-44b2-bca2-8cd21333575d)
+![ss4](https://github.com/joelali5/Neuromodulation/assets/42684254/ae92ada4-ae0d-42cc-9894-e853eefc3040)
+![ss3](https://github.com/joelali5/Neuromodulation/assets/42684254/c2758251-a14c-4f34-9ecb-c03ce628b314)
+![ss2](https://github.com/joelali5/Neuromodulation/assets/42684254/58c12782-e2df-4a6a-a27d-03b4e981b8e0)
+
  
