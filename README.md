@@ -16,7 +16,7 @@ Neuromodulation is a Patient Management System designed to handle patient data,
 - **Version Control**: Git and Github
 
 ## Project Structure
-
+```
 ├── Database
     ├── Stored Procedures
     ├── CreateTable.sql
@@ -28,7 +28,7 @@ Neuromodulation is a Patient Management System designed to handle patient data,
 ├── index.php
 ├── README.md
 ├── web.config
-
+```
 ## Key Decisions to support development
     - Update Button: I created an update button in the admin view to instantly update the UI and database
     - Database creation and Stored Procedures: The 'CreateTable.sql' script also contains the sql commands for creating the stored procedures.     This is done to avoid any potential errors that may arise from running the stored procedures and createTable scripts separately.
