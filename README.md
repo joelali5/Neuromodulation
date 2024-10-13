@@ -1,4 +1,4 @@
-# The Walton Centre NHS Founda3on Trust – Coding Challenge
+# The Walton Centre NHS Foundation Trust – Coding Challenge
 ## Neuromodulation
 
 Neuromodulation is a Patient Management System designed to handle patient data, such as specifics about their pain management details and cumulative pain assessments. The system has two interfaces: an admin interface for viewing, modifying, and deleting records, and a user interface for submitting patient details.
